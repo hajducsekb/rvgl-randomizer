@@ -44,6 +44,7 @@ def get_category(trackurl, trackid, trackname):
             trackType = str(link.get_text()).replace(' ', '')
             #print('Length: ' + tracklength)
             print('Category: ' + trackType)
+            return trackType
 
 def randomize():
     html_doc = requests.get('http://revoltzone.net/').content

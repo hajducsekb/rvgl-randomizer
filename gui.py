@@ -30,9 +30,9 @@ labelCategory.place(anchor=NW, relx=0.1,rely=0.35)
 labelLength=Label(tabRand, text="Length: ")
 labelLength.place(anchor=NW, relx=0.1,rely=0.4)
 
-bötön = Button(tabRand,text="Meg ne nyomd", command=lambda:
+bötön = Button(tabRand,text="Meg ne nyomd", command=lambda:[
         labelLength.config(text="Length: " + rvgl_get.get_length('tracks/43467/Rooftops 1', '43467', 'Rooftops 1')),
-        labelCategory.config(text='Category: ' + rvgl_get.get_category('tracks/43467/Rooftops 1', '43467', 'Rooftops 1')))
+        labelCategory.config(text='Category: ' + rvgl_get.get_category('tracks/43467/Rooftops 1', '43467', 'Rooftops 1'))])
 bötön.place(anchor=NW, relx=0.35, rely=0.12, relwidth=0.3)
 
 
