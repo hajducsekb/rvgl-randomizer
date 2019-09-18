@@ -4,7 +4,7 @@ import requests
 import urllib.request
 import zipfile
 
-rvglpath = '/Users/bencehajducsek/rvgl'
+rvglpath = '/rvgl/path/here'
 global trackno
 global carno
 
