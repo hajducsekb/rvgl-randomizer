@@ -28,19 +28,22 @@ def get_length(trackurl, trackid, trackname):
             #print('Da length line')
             global tracklength
             tracklength = str(link.get_text()).replace(' ', '').replace('Meters', '')
-            #print('Length: ' + tracklength)
+            print('Length: ' + tracklength)
+            return tracklength
 
-def get_type(trackurl, trackid, trackname):
+def get_category(trackurl, trackid, trackname):
     html_doc2 = requests.get('http://revoltzone.net/' + str(trackurl)).content
     soup2 = BeautifulSoup(html_doc2, 'html.parser')
+    lineno = 0
     for link in soup2.find_all(id='right'):
         #print(link.get_text())
-        if 'Meters' in str(link.get_text()):
+        lineno +=1
+        if lineno == 5:
             #print('Da length line')
-            global tracklength
-            tracklength = str(link.get_text()).replace(' ', '').replace('Meters', '')
+            global trackType
+            trackType = str(link.get_text()).replace(' ', '')
             #print('Length: ' + tracklength)
-
+            print('Category: ' + trackType)
 
 def randomize():
     html_doc = requests.get('http://revoltzone.net/').content
@@ -53,27 +56,27 @@ def randomize():
         source = link.get('href').split('/')
         contentid = str(source[1])
         contentname = str(source[2])
-        
+
         if str(source[0]) == 'tracks':
             print("It's a track!")
             get_length(trackurl = contenturl, trackid = contentid, trackname = contentname)
             print('Name: ' + contentname + '\nLength: ' + tracklength)
             dl_content(contid = contentid)
-        
+
         if str(source[0]) == 'cars':
             print("It's a car!")
             print('Name: ' + contentname)
             dl_content(contid = contentid)
 
 
-#for CLI use           
-modequery = input('0: randomizer\n1: download based on ID\nWhich mode do you choose? ')
-if str(modequery) == '0':
-    randomize()
-elif str(modequery) == '1':
-    modids = str(input('What are the IDs of the tracks/cars')).replace(' ', '').split(',')
-    for item in modids:
-        dl_content(contid = item)
+#for CLI use
+#modequery = input('0: randomizer\n1: download based on ID\nWhich mode do you choose? ')
+#if str(modequery) == '0':
+    #randomize()
+#elif str(modequery) == '1':
+    #modids = str(input('What are the IDs of the tracks/cars')).replace(' ', '').split(',')
+    #for item in modids:
+        #dl_content(contid = item)
 
 #get_length(9172)
 
