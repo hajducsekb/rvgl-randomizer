@@ -2,17 +2,30 @@ import os
 from bs4 import BeautifulSoup
 import requests
 import urllib.request
+import urllib.parse
 import zipfile
+from PIL import Image
 
-rvglpath = '/rvgl/path/here'
-global trackno
-global carno
+
+rvglpath = '/home/hajducsekb/RVGL/'
+trackname=""
+tracklength=""
+trackType=""
+trackID=""
+carname=""
+carrating=""
+carID=""
+carURL=""
+trackURL=""
+trackgfx=""
+cargfx=""
+
+workingpath = os.path.dirname(os.path.abspath(__file__))
+os.chdir(workingpath)
 
 def dl_content(contid):
 # Download the file from `url` and save it locally under `file_name`:
     print('Downloading...')
-    workingpath = os.path.dirname(os.path.abspath(__file__))
-    os.chdir(workingpath)
     urllib.request.urlretrieve('http://revoltzone.net/sitescripts/dload.php?id=' + contid, 'rvz' + contid + '_dl.zip')
     print('Content downloaded')
     with zipfile.ZipFile('./rvz' + contid + '_dl.zip' , 'r') as zip_ref:
@@ -37,14 +50,29 @@ def get_category(trackurl, trackid, trackname):
     lineno = 0
     for link in soup2.find_all(id='right'):
         #print(link.get_text())
-        lineno +=1
+        lineno += 1
         if lineno == 5:
-            #print('Da length line')
             global trackType
+            #print('Da length line')
             trackType = str(link.get_text()).replace(' ', '')
             #print('Length: ' + tracklength)
             print('Category: ' + trackType)
             return trackType
+
+def get_rating(carurl, carid, carname):
+    html_doc3 = requests.get('http://revoltzone.net/' + str(carurl)).content
+    soup4 = BeautifulSoup(html_doc3, 'html.parser')
+    lineno = 0
+    for link in soup4.find_all(id='right'):
+        #print(link.get_text())
+        lineno += 1
+        if lineno == 6:
+            global carrating
+            #print('Da length line')
+            carrating = str(link.get_text()).replace(' ', '')
+            #print('Length: ' + tracklength)
+            print('Category: ' + carrating)
+            return carrating
 
 def randomize():
     html_doc = requests.get('http://revoltzone.net/').content
@@ -55,20 +83,56 @@ def randomize():
         print('URL: ' + link.get('href'))
         contenturl = link.get('href')
         source = link.get('href').split('/')
+        global contentid
+        global contentname
         contentid = str(source[1])
         contentname = str(source[2])
+
 
         if str(source[0]) == 'tracks':
             print("It's a track!")
             get_length(trackurl = contenturl, trackid = contentid, trackname = contentname)
+            get_category(trackurl = contenturl, trackid = contentid, trackname = contentname)
+            global trackgfx
+            trackgfx = str(link.find('img').get('src'))
             print('Name: ' + contentname + '\nLength: ' + tracklength)
-            dl_content(contid = contentid)
+            global trackname
+            global trackID
+            global trackURL
+            trackname = contentname
+            trackID=contentid
+            trackURL=contenturl
+            #dl_content(contid = contentid)
 
         if str(source[0]) == 'cars':
+            get_rating(carurl = contenturl, carid = contentid, carname = contentname)
+            global cargfx
+            cargfx = str(link.find('img').get('src'))
+            global carname
+            global carID
+            global carURL
+            carname = contentname
+            carID = contentid
+            carURL= contenturl
             print("It's a car!")
             print('Name: ' + contentname)
-            dl_content(contid = contentid)
+            #dl_content(contid = contentid)
 
+def getTrackImgURL(contenturl):
+    global trackgfx
+    #print('WHAT YOU NEED' + urllib.parse.quote(trackgfx))
+    urllib.request.urlretrieve(trackgfx, 'track.png')
+    return 'track.png'
+
+
+def getCarImgURL(contenturl):
+    global cargfx
+    urllib.request.urlretrieve(cargfx, 'car.png')
+    return 'car.png'
+
+
+#getCarImgURL('cars/3142/ToyLamb')
+#randomize()
 
 #for CLI use
 #modequery = input('0: randomizer\n1: download based on ID\nWhich mode do you choose? ')
