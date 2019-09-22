@@ -120,14 +120,15 @@ def randomize():
 
 def getTrackImgURL(contenturl):
     global trackgfx
-    #print('WHAT YOU NEED' + urllib.parse.quote(trackgfx))
-    urllib.request.urlretrieve(trackgfx, 'track.png')
+    t=urllib.parse.quote(trackgfx,safe=':/_')
+    urllib.request.urlretrieve(t, 'track.png')
     return 'track.png'
 
 
 def getCarImgURL(contenturl):
     global cargfx
-    urllib.request.urlretrieve(cargfx, 'car.png')
+    c=urllib.parse.quote(cargfx,safe=':/_')
+    urllib.request.urlretrieve(c, 'car.png')
     return 'car.png'
 
 
