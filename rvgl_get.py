@@ -5,7 +5,22 @@ import urllib.request
 import urllib.parse
 import zipfile
 from PIL import Image
+import sys
 
+if sys.platform == 'windows':
+    execname = 'rvzparser.exe'
+else:
+    execname = 'rvzparser'
+
+
+
+if getattr(sys, 'frozen', False):
+    # If the application is run as a bundle, the pyInstaller bootloader
+    # extends the sys module by a flag frozen=True and sets the app
+    # path into variable _MEIPASS'.
+    workingpath = sys.executable.replace(execname,'')
+else:
+    workingpath = os.path.dirname(os.path.abspath(__file__))
 
 rvglpath = '/home/hajducsekb/RVGL/'
 trackname=""
@@ -20,8 +35,10 @@ trackURL=""
 trackgfx=""
 cargfx=""
 
-workingpath = os.path.dirname(os.path.abspath(__file__))
+#workingpath = os.path.dirname(os.path.abspath(__file__))
 os.chdir(workingpath)
+print(workingpath)
+
 
 def dl_content(contid):
 # Download the file from `url` and save it locally under `file_name`:
@@ -131,6 +148,10 @@ def getCarImgURL(contenturl):
     urllib.request.urlretrieve(c, 'car.png')
     return 'car.png'
 
+def fixcases():
+    os.chdir(rvglpath)
+    os.system('./fix_cases')
+    os.chdir(workingpath)
 
 #getCarImgURL('cars/3142/ToyLamb')
 #randomize()

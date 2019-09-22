@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import filedialog
 from PIL import Image
 import rvgl_get
 
@@ -8,7 +9,10 @@ import rvgl_get
 
 #basic initialization
 window = Tk()
-window.title("RVZ parser")
+window.title("Re-Volt Randomizer App")
+
+photoW=PhotoImage(file="bolt.gif")
+window.iconphoto(False,photoW)
 
 #notebook tab initialization
 tab_control=ttk.Notebook(window)
@@ -19,10 +23,13 @@ tab_control.pack(expand=1, fill='both')
 tab_control.add(tabID, text='ID based downloader')
 tab_control.pack(expand=1, fill='both')
 
-labelAppname=Label(tabRand, text="Re-Volt Randomizer App")
+#if rvgl_get.rvglpath = ''
+
+
+labelAppname=Label(tabRand, text="Randomizer")
 labelAppname.place(anchor = NW, relx=0.2, rely=0.03, relwidth=0.6)
 
-labeltítel=Label(tabRand, text="Track")
+labeltítel=Label(tabRand, text="Track", state="disabled")
 labeltítel.place(anchor=NW, relx=0.1,rely=0.23)
 
 labelName=Label(tabRand, text="Name: ")
@@ -52,14 +59,20 @@ bötön = Button(tabRand,text="Meg ne nyomd", command=lambda:[
         gfxTrack.config(file = rvgl_get.getTrackImgURL(rvgl_get.trackURL))])
 bötön.place(anchor=NW, relx=0.35, rely=0.1, relwidth=0.3)
 
-dlbötön = Button(tabRand,text='D0wnl04d', command=lambda:[
+dlbötön = Button(tabRand,text='Download and copy IDs', command=lambda:[
         rvgl_get.dl_content(rvgl_get.carID),
         labelCarDL.config(text='Car Downloaded'),
         rvgl_get.dl_content(rvgl_get.trackID),
         labelTrackDL.config(text='Track Downloaded'),
+        window.clipboard_clear(),
+        window.clipboard_append(rvgl_get.trackID + ", " + rvgl_get.carID)
     ])
 dlbötön.place(anchor=NW, relx=0.35, rely=0.8, relwidth=0.3)
 
+caseButton = Button(tabRand,text='Fix Cases (Linux only)', command=lambda:[
+        rvgl_get.fixcases()
+])
+caseButton.place(anchor=NW, relx=0.2, rely=0.9, relwidth=0.6)
 
 labeltíte=Label(tabRand, text="Car")
 labeltíte.place(anchor=NW, relx=0.6,rely=0.23)
@@ -76,6 +89,12 @@ labelCarimage.place(anchor= NW, relx=0.6, rely=0.55)
 
 labelCarDL=Label(tabRand, text="")
 labelCarDL.place(anchor=NW, relx=0.6,rely=0.48)
+
+labelAppname=Label(tabID, text="ID Downloader")
+labelAppname.place(anchor = NW, relx=0.2, rely=0.03, relwidth=0.6)
+
+IDEntry = Entry(tabID,width=10)
+IDEntry.place(anchor=NW, relx=0.05, rely=0.2)
 
 
 #image.show()
