@@ -23,13 +23,19 @@ tab_control.pack(expand=1, fill='both')
 tab_control.add(tabID, text='ID based downloader')
 tab_control.pack(expand=1, fill='both')
 
-#if rvgl_get.rvglpath = ''
+if rvgl_get.rvglpath == '':
+        rvgl_get.rvglpath = filedialog.askdirectory(initialdir=rvgl_get.workingpath)
+        print ('Your path is... ' + rvgl_get.rvglpath)
+        with open('./rvglparser_config.txt', 'w') as configfile:
+                configfile.write(rvgl_get.rvglpath)
+
+
 
 
 labelAppname=Label(tabRand, text="Randomizer")
 labelAppname.place(anchor = NW, relx=0.2, rely=0.03, relwidth=0.6)
 
-labeltítel=Label(tabRand, text="Track", state="disabled")
+labeltítel=Label(tabRand, text="Track")
 labeltítel.place(anchor=NW, relx=0.1,rely=0.23)
 
 labelName=Label(tabRand, text="Name: ")
@@ -67,7 +73,7 @@ dlbötön = Button(tabRand,text='Download and copy IDs', command=lambda:[
         window.clipboard_clear(),
         window.clipboard_append(rvgl_get.trackID + ", " + rvgl_get.carID)
     ])
-dlbötön.place(anchor=NW, relx=0.35, rely=0.8, relwidth=0.3)
+dlbötön.place(anchor=NW, relx=0.35, rely=0.8, relwidth=0.6)
 
 caseButton = Button(tabRand,text='Fix Cases (Linux only)', command=lambda:[
         rvgl_get.fixcases()
@@ -94,13 +100,22 @@ labelAppname=Label(tabID, text="ID Downloader")
 labelAppname.place(anchor = NW, relx=0.2, rely=0.03, relwidth=0.6)
 
 IDEntry = Entry(tabID,width=10)
-IDEntry.place(anchor=NW, relx=0.05, rely=0.2)
+IDEntry.place(anchor=CENTER, relx=0.3, rely=0.2)
 
+labelDL=Label(tabID, text="")
+labelDL.place(anchor=CENTER, relx=0.5,rely=0.8)
 
+IDdlbötön= Button(tabID, text="Download by ID", command=lambda:[
+        rvgl_get.dl_content(IDEntry.get()),
+        labelDL.config(text=rvgl_get.dlState)
+])
+IDdlbötön.place(anchor=CENTER, relx=0.7, rely=0.2)
 #image.show()
 #image=Image.open(filename)
 #imagesprite = window.create_image(400,400,image=image)
 #rvgl_get.get_length(trackid = input)
+
+
 
 window.geometry('400x400')
 window.mainloop()

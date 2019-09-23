@@ -13,16 +13,15 @@ else:
     execname = 'rvzparser'
 
 
-
 if getattr(sys, 'frozen', False):
     # If the application is run as a bundle, the pyInstaller bootloader
     # extends the sys module by a flag frozen=True and sets the app
     # path into variable _MEIPASS'.
-    workingpath = sys.executable.replace(execname,'')
+    workingpath = os.path.dirname(sys.executable)
 else:
     workingpath = os.path.dirname(os.path.abspath(__file__))
 
-rvglpath = '/home/hajducsekb/RVGL/'
+
 trackname=""
 tracklength=""
 trackType=""
@@ -34,20 +33,70 @@ carURL=""
 trackURL=""
 trackgfx=""
 cargfx=""
+dlState=""
 
 #workingpath = os.path.dirname(os.path.abspath(__file__))
 os.chdir(workingpath)
 print(workingpath)
+if os.path.isfile('./rvglparser_config.txt') == False:
+    with open('./rvglparser_config.txt', 'w') as configfile:
+        rvglpath = ''
+
+else:
+    with open('./rvglparser_config.txt', 'r') as configfile:
+        rvglpath = str(configfile.read())
+        print('RVGL Path: ' + rvglpath)
+
+
+
 
 
 def dl_content(contid):
 # Download the file from `url` and save it locally under `file_name`:
     print('Downloading...')
-    urllib.request.urlretrieve('http://revoltzone.net/sitescripts/dload.php?id=' + contid, 'rvz' + contid + '_dl.zip')
-    print('Content downloaded')
-    with zipfile.ZipFile('./rvz' + contid + '_dl.zip' , 'r') as zip_ref:
-        zip_ref.extractall(rvglpath)
-    os.remove('./rvz' + contid + '_dl.zip' )
+    global dlState
+    try:
+        urllib.request.urlretrieve('http://revoltzone.net/sitescripts/dload.php?id=' + contid, 'rvz' + contid + '_dl.zip')
+        print('Content downloaded')
+        with zipfile.ZipFile('./rvz' + contid + '_dl.zip' , 'r') as zip_ref:
+            zip_elem = zip_ref.namelist()
+            #print(zip_elem)
+            overwriteFiles = 0
+            for item in zip_elem:
+                print(str(item))
+                item_list = item.split('/')
+                filename = str(item_list[-1])
+                if os.path.isfile(rvglpath + '/' + str(item)) == False:
+                    zip_ref.extract(member = str(item), path = rvglpath)
+                    print('Extracting ' + str(item))
+                elif overwriteFiles == 0:
+                    overwrite = input(filename + ' already exists. Overwrite?\ny: yes\nn: no\na: all\ns: skip all')
+                    over_string = str(overwrite).replace(' ', '').lower()
+                    if over_string == 'y':
+                        zip_ref.extract(member = str(item), path = rvglpath)
+                        print('Extracting ' + str(item))
+                    elif over_string == 'n':
+                        print (str(item) + 'not extracted')
+                    elif over_string == 'a':
+                        overwriteFiles = 1
+                    elif over_string == 's':
+                        print('No duplicates will be extracted or overwritten')
+                        overwriteFiles = -1
+                        print('Skipping ' + str(item))
+                elif overwriteFiles == 1:
+                    zip_ref.extract(member = str(item), path = rvglpath)
+                    print('Overwriting ' + str(item))
+                elif overwriteFiles == -1:
+                    print('Skipping ' + str(item))
+            print('files are unzipped')
+
+        '''with zipfile.ZipFile('./rvz' + contid + '_dl.zip' , 'r') as zip_ref:
+            zip_ref.extractall(rvglpath)'''
+        os.remove('./rvz' + contid + '_dl.zip' )
+        dlState = 'Downloaded'
+    except urllib.error.HTTPError:
+        print('ID does not exist')
+        dlState = 'Content not found'
 
 def get_length(trackurl, trackid, trackname):
     html_doc2 = requests.get('http://revoltzone.net/' + str(trackurl)).content
