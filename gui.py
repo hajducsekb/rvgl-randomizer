@@ -73,7 +73,7 @@ dlbötön = Button(tabRand,text='Download and copy IDs', command=lambda:[
         window.clipboard_clear(),
         window.clipboard_append(rvgl_get.trackID + ", " + rvgl_get.carID)
     ])
-dlbötön.place(anchor=NW, relx=0.35, rely=0.8, relwidth=0.6)
+dlbötön.place(anchor=NW, relx=0.2, rely=0.8, relwidth=0.6)
 
 caseButton = Button(tabRand,text='Fix Cases (Linux only)', command=lambda:[
         rvgl_get.fixcases()
