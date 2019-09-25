@@ -35,10 +35,10 @@ if rvgl_get.rvglpath == '':
 labelAppname=Label(tabRand, text="Randomizer")
 labelAppname.place(anchor = NW, relx=0.2, rely=0.03, relwidth=0.6)
 
-labeltítel=Label(tabRand, text="Track")
+labeltítel=Label(tabRand, text="Track:")
 labeltítel.place(anchor=NW, relx=0.1,rely=0.23)
 
-labelName=Label(tabRand, text="Name: ")
+labelName=Label(tabRand, text="Name: ", underline=1)
 labelName.place(anchor=NW, relx=0.1,rely=0.3)
 
 labelCategory=Label(tabRand, text="Category: ")
@@ -49,12 +49,14 @@ labelLength.place(anchor=NW, relx=0.1,rely=0.4)
 
 gfxTrack = PhotoImage(file = 'startup.png')
 labelTrackimage = Label(tabRand, image=gfxTrack)
-labelTrackimage.place(anchor= NW, relx=0.1, rely=0.55)
+labelTrackimage.place(anchor= NW, relx=0.1, rely=0.5)
 
 labelTrackDL=Label(tabRand, text="")
-labelTrackDL.place(anchor=NW, relx=0.1,rely=0.48)
+labelTrackDL.place(anchor=NW, relx=0.1,rely=0.45)
 
-bötön = Button(tabRand,text="Meg ne nyomd", command=lambda:[
+bötön = Button(tabRand,text="Randomize", command=lambda:[
+        labelCarDL.config(text=""),
+        labelTrackDL.config(text=""),
         rvgl_get.randomize(),
         labelLength.config(text="Length: " + rvgl_get.tracklength + ' Meters'),
         labelCategory.config(text='Category: ' + rvgl_get.trackType),
@@ -80,7 +82,7 @@ caseButton = Button(tabRand,text='Fix Cases (Linux only)', command=lambda:[
 ])
 caseButton.place(anchor=NW, relx=0.2, rely=0.9, relwidth=0.6)
 
-labeltíte=Label(tabRand, text="Car")
+labeltíte=Label(tabRand, text="Car:", underline=True)
 labeltíte.place(anchor=NW, relx=0.6,rely=0.23)
 
 labelCarName=Label(tabRand, text="Name: ")
@@ -91,10 +93,10 @@ labelCarCategory.place(anchor=NW, relx=0.6,rely=0.35)
 
 gfxCar = PhotoImage(file = 'startup.png')
 labelCarimage = Label(tabRand, image=gfxCar)
-labelCarimage.place(anchor= NW, relx=0.6, rely=0.55)
+labelCarimage.place(anchor= NW, relx=0.6, rely=0.5)
 
 labelCarDL=Label(tabRand, text="")
-labelCarDL.place(anchor=NW, relx=0.6,rely=0.48)
+labelCarDL.place(anchor=NW, relx=0.6,rely=0.45)
 
 labelAppname=Label(tabID, text="ID Downloader")
 labelAppname.place(anchor = NW, relx=0.2, rely=0.03, relwidth=0.6)
@@ -102,10 +104,14 @@ labelAppname.place(anchor = NW, relx=0.2, rely=0.03, relwidth=0.6)
 IDEntry = Entry(tabID,width=10)
 IDEntry.place(anchor=CENTER, relx=0.3, rely=0.2)
 
+labelid = Label(tabID, text="ID:")
+labelid.place(anchor=CENTER, relx=0.13, rely=0.2)
+
 labelDL=Label(tabID, text="")
 labelDL.place(anchor=CENTER, relx=0.5,rely=0.8)
 
 IDdlbötön= Button(tabID, text="Download by ID", command=lambda:[
+        labelDL.config(text=""),
         rvgl_get.dl_content(IDEntry.get()),
         labelDL.config(text=rvgl_get.dlState)
 ])
