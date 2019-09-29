@@ -158,7 +158,7 @@ def getCarImgURL(contenturl):
     global cargfx
     c=urllib.parse.quote(cargfx,safe=':/_')
     print(c)
-    urllib.request.urlretrieve(c, '.carpng')
+    urllib.request.urlretrieve(c, 'car.png')
     return 'car.png'
        
 
