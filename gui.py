@@ -24,7 +24,7 @@ tab_control.add(tabID, text='ID based downloader')
 tab_control.pack(expand=1, fill='both')
 
 if rvgl_get.rvglpath == '':
-        rvgl_get.rvglpath = filedialog.askdirectory(initialdir=rvgl_get.workingpath)
+        rvgl_get.rvglpath = filedialog.askdirectory(initialdir=rvgl_get.workingpath, title='Select RVGL installation folder')
         print ('Your path is... ' + rvgl_get.rvglpath)
         with open('./rvglparser_config.txt', 'w') as configfile:
                 configfile.write(rvgl_get.rvglpath)
