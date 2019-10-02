@@ -228,29 +228,3 @@ def fixcases():
     os.chdir(rvglpath)
     os.system('./fix_cases')
     os.chdir(workingpath)
-
-
-
-#for CLI use
-#modequery = input('0: randomizer\n1: download based on ID\nWhich mode do you choose? ')
-#if str(modequery) == '0':
-    #randomize()
-#elif str(modequery) == '1':
-    #modids = str(input('What are the IDs of the tracks/cars')).replace(' ', '').split(',')
-    #for item in modids:
-        #dl_content(contid = item)
-
-#get_length(9172)
-
-
-
-#workingpath = os.path.dirname(os.path.abspath(__file__))
-##print(workingpath)
-#os.chdir(workingpath)
-
-#trackid = input('What are the IDs of the tracks? (seperated by commas)').replace(' ', '').split(',')
-
-#for item in trackid:
-    #os.system('wget http://revoltzone.net/sitescripts/dload.php?id=' + str(item))
-    #os.system('unzip dload.php?id=' + str(item))
-    #os.remove('dload.php?id=' + str(item))

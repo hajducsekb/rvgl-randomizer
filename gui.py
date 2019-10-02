@@ -4,9 +4,6 @@ from tkinter import filedialog
 from PIL import Image
 import rvgl_get
 
-
-#rvgl_get.get_category('tracks/43467/Rooftops 1', '43467', 'Rooftops 1')
-
 #basic initialization
 window = Tk()
 window.title("Re-Volt Randomizer App")
@@ -168,12 +165,6 @@ Törölbötön= Button(tabID, text="Delete track and carlist", command=lambda:[
         labelCars.config(text="Cars: \n")
 ])
 Törölbötön.place(anchor=CENTER, relx=0.5, rely=0.85)
-#image.show()
-#image=Image.open(filename)
-#imagesprite = window.create_image(400,400,image=image)
-#rvgl_get.get_length(trackid = input)
-
-
 
 window.geometry('400x400')
 window.mainloop()
