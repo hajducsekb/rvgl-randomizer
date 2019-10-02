@@ -67,11 +67,39 @@ bötön = Button(tabRand,text="Randomize", command=lambda:[
         gfxTrack.config(file = rvgl_get.getTrackImgURL(rvgl_get.trackURL))])
 bötön.place(anchor=NW, relx=0.35, rely=0.1, relwidth=0.3)
 
+def trackList():
+        base = labelTracks.cget("text")
+        labelTracks.config(text=base+rvgl_get.trackname+"\n")
+
+def carList():
+        base = labelCars.cget("text")
+        labelCars.config(text=base+rvgl_get.carname+"\n")
+
+dlbötönTrack = Button(tabRand,text='Download Track', command=lambda:[
+        rvgl_get.dl_content(rvgl_get.trackID),
+        labelTrackDL.config(text='Track Downloaded'),
+        trackList(),
+        window.clipboard_clear(),
+        window.clipboard_append(rvgl_get.trackID)
+    ])
+dlbötönTrack.place(anchor=NW, relx=0.07, rely=0.69, relwidth=0.25)
+
+dlbötönCar = Button(tabRand,text='Download Car', command=lambda:[
+        rvgl_get.dl_content(rvgl_get.carID),
+        labelCarDL.config(text='Car Downloaded'),
+        carList(),
+        window.clipboard_clear(),
+        window.clipboard_append(rvgl_get.carID)
+    ])
+dlbötönCar.place(anchor=NW, relx=0.57, rely=0.69, relwidth=0.25)
+
 dlbötön = Button(tabRand,text='Download and copy IDs', command=lambda:[
         rvgl_get.dl_content(rvgl_get.carID),
         labelCarDL.config(text='Car Downloaded'),
+        carList(),
         rvgl_get.dl_content(rvgl_get.trackID),
         labelTrackDL.config(text='Track Downloaded'),
+        trackList(),
         window.clipboard_clear(),
         window.clipboard_append(rvgl_get.trackID + ", " + rvgl_get.carID)
     ])
@@ -108,14 +136,38 @@ labelid = Label(tabID, text="ID:")
 labelid.place(anchor=CENTER, relx=0.13, rely=0.2)
 
 labelDL=Label(tabID, text="")
-labelDL.place(anchor=CENTER, relx=0.5,rely=0.8)
+labelDL.place(anchor=CENTER, relx=0.5,rely=0.3)
+
+labelTracks=Label(tabID,text="Tracks:\n")
+labelTracks.place(anchor=NW, relx=0,rely=0.4)
+
+labelCars=Label(tabID,text="Cars:\n")
+labelCars.place(anchor=NE, relx=1,rely=0.4)
+
+def splitAndDl(idnos):
+        labelDL.config(text="")
+        idk=idnos
+        idks=idk.split(',')
+        for ide in idks:
+                rvgl_get.dl_content(ide)
+                if rvgl_get.track==True:
+                        base = labelTracks.cget("text")
+                        labelTracks.config(text=base+rvgl_get.trackname+"\n")
+                if rvgl_get.car==True:
+                        base = labelCars.cget("text")
+                        labelCars.config(text=base+rvgl_get.carname+"\n")
+        labelDL.config(text=rvgl_get.dlState)
 
 IDdlbötön= Button(tabID, text="Download by ID", command=lambda:[
-        labelDL.config(text=""),
-        rvgl_get.dl_content(IDEntry.get()),
-        labelDL.config(text=rvgl_get.dlState)
+        splitAndDl(IDEntry.get())
 ])
 IDdlbötön.place(anchor=CENTER, relx=0.7, rely=0.2)
+
+Törölbötön= Button(tabID, text="Delete track and carlist", command=lambda:[
+        labelTracks.config(text="Tracks: \n"),
+        labelCars.config(text="Cars: \n")
+])
+Törölbötön.place(anchor=CENTER, relx=0.5, rely=0.85)
 #image.show()
 #image=Image.open(filename)
 #imagesprite = window.create_image(400,400,image=image)

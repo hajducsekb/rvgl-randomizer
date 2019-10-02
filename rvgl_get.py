@@ -6,6 +6,7 @@ import urllib.parse
 import zipfile
 from PIL import Image
 import sys
+import codecs
 
 if sys.platform == 'windows':
     execname = 'rvzparser.exe'
@@ -34,6 +35,8 @@ trackURL=""
 trackgfx=""
 cargfx=""
 dlState=""
+track=False
+car=False
 
 #workingpath = os.path.dirname(os.path.abspath(__file__))
 os.chdir(workingpath)
@@ -58,6 +61,10 @@ def dl_content(idlist):
         contid = listitem.replace(' ', '')
         print('Downloading...')
         global dlState
+        global track
+        global car
+        track=False
+        car=False
         try:
             urllib.request.urlretrieve('http://revoltzone.net/sitescripts/dload.php?id=' + contid, 'rvz' + contid + '_dl.zip')
             print('Content downloaded')
@@ -94,7 +101,59 @@ def dl_content(idlist):
                 print('files are unzipped')'''
 
             with zipfile.ZipFile('./rvz' + contid + '_dl.zip' , 'r') as zip_ref:
-                zip_ref.extractall(rvglpath)
+                zip_elem = zip_ref.namelist()
+                for item in zip_elem:
+                    print(item)
+                    if 'levels' in item:
+                        track=True
+                    if 'cars' in item:
+                        car=True
+                    if (str(item)).lower().find("parameters")!=-1:
+                        zip_ref.extract(item)
+                        with open(item, 'r', encoding='latin1') as textfile:
+                            '''print(str(textfile.read()))
+                            toReplace = '\\r\\n' 
+                            print('To replace: ' + toReplace)'''
+                            #coding: utf-8
+
+                            paramfile = textfile.read()
+                            eredm = paramfile.splitlines(False)
+                            #linelist = eredm[7].split('"')
+                            #print(linelist[1])
+                            #a=paramfile.find("Name")
+                            #print(a)
+                            for line in eredm:
+                                if 'name' in line.lower():
+                                    linelist = line.split('"')
+                                    #print(linelist[1])
+                                    global carname
+                                    carname = linelist[1]
+                                    break
+
+                    if item.endswith('.inf'):
+                        zip_ref.extract(item)
+                        with open(item, 'r') as textfile:
+                            '''print(str(textfile.read()))
+                            toReplace = '\\r\\n' 
+                            print('To replace: ' + toReplace)'''
+                            paramfile = textfile.read()
+                            eredm = paramfile.splitlines(False)
+                            #linelist = eredm[7].split('"')
+                            #print(linelist[1])
+                            #a=paramfile.find("Name")
+                            #print(a)
+                            for line in eredm:
+                                if 'name' in line.lower():
+                                    linelist = line.split("'")
+                                    #print(linelist[1])
+                                    global trackname
+                                    trackname = linelist[1]
+                                    break
+
+                    if item.endswith('.db')==False:
+                        zip_ref.extract(item,rvglpath)
+                
+                #zip_ref.extractall(rvglpath)
             os.remove('./rvz' + contid + '_dl.zip' )
             dlState = 'Downloaded'
         except urllib.error.HTTPError:
