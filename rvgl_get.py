@@ -129,6 +129,7 @@ def dl_content(idlist):
                                     global carname
                                     carname = linelist[1]
                                     break
+                        os.remove(item)
 
                     if item.endswith('.inf'):
                         zip_ref.extract(item)
@@ -149,6 +150,7 @@ def dl_content(idlist):
                                     global trackname
                                     trackname = linelist[1]
                                     break
+                        os.remove(item)
 
                     if item.endswith('.db')==False:
                         zip_ref.extract(item,rvglpath)
